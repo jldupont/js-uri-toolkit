@@ -1,0 +1,25 @@
+{
+  "name": "js-uri-toolkit",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jldupont/js-uri-toolkit",
+  "authors": [
+    "Jean-Lou Dupont <github@jldupont.com>"
+  ],
+  "description": "Simple javascript URI manipulation",
+  "main": "js-uri-toolkit.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "uri",
+    "url"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

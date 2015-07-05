@@ -1,0 +1,17 @@
+{
+  "name": "js-uri-toolkit",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "should": "^7.0.1"
+  }
+}
