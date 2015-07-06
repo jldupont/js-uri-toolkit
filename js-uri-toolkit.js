@@ -62,6 +62,25 @@ uri.parse = function(input){
 		return callback(left, parts.join(delim));
 	};
 
+	// Process query string to an query object
+	function process_qs(input) {
+		
+		var o={};
+		var parts = input.split("&");
+		
+		for (var index in parts) {
+			// 2 cases:
+			//   a) key=value
+			//   b) key
+			var key_value = parts[index].split("=");
+			var key = key_value[0];
+			var value = key_value[1] || true;
+			o[key] = value;
+		};
+		
+		return o;
+	};
+	
 	// STEP 1
 	xsplit(input, "://", function(scheme, rest){
 		
@@ -88,9 +107,7 @@ uri.parse = function(input){
 				xsplit(rest, "?", function(rest, maybe_query){
 					
 					o.qs = maybe_query || "";
-					
-					var qso = o.qs.split("&");
-					
+					o.query = process_qs(o.qs);
 					
 					// STEP 5
 					xsplit(rest, "/", function(rest, maybe_path){
