@@ -15,6 +15,8 @@ var uri3 = "HTTP://domain.com:6666/somepath?key1=value1&key2=value2";
 var uri4 = "HTTP://domain.com:6666?key1=value1&key2=value2";
 var uri5 = "HTTP://domain.com:6666#somehash";
 
+var uri10 = "HTTP://user:pass@domain.com:6666/somepath?key1=value1&key2=value2#somehash?invalidqs";
+
 
 // ----------------------------------------------------------------- TESTS
 
@@ -23,6 +25,20 @@ it('HTTP should be the scheme', function(){
 	var p = uri.parse(uri1);
 	
 	should.equal(p.scheme, 'http');
+});
+
+it('Check port 1', function(){
+	
+	var p = uri.parse(uri0);
+	
+	should.equal(p.port, null);
+});
+
+it('Check port 2', function(){
+	
+	var p = uri.parse(uri1);
+	
+	should.equal(p.port, 6666);
 });
 
 it('Username and Password', function(){
@@ -99,7 +115,6 @@ it('hostname is valid - test 6', function(){
 });
 
 
-/*
 it('Check Hash', function(){
 	
 	var p = uri.parse(uri1);
@@ -121,4 +136,19 @@ it('No Hash', function(){
 	
 	should.equal(p.hash, '');
 });
-*/
+
+
+it('With invalid qs', function(){
+	
+	var p = uri.parse(uri10);
+	
+	should.equal(p.hash, 'somehash');
+});
+
+it('With invalid qs and a valid one', function(){
+	
+	var p = uri.parse(uri10);
+	
+	should.equal(p.hash, 'somehash');
+	should.equal(p.qs,   'key1=value1&key2=value2');
+});

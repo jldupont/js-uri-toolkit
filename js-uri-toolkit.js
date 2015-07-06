@@ -45,7 +45,7 @@ uri.parse = function(input){
 		host: '',
 		port: '',
 		path: '',
-		query_string: '',
+		qs: '',
 		query: {},
 		hash: ''
 	};
@@ -53,6 +53,10 @@ uri.parse = function(input){
 	function xsplit(str, delim, callback) {
 		
 		var parts = str.split(delim);
+		
+		if (parts.length==1)
+			return callback(str, '');
+		
 		var left  = parts.shift();
 		
 		return callback(left, parts.join(delim));
@@ -66,38 +70,37 @@ uri.parse = function(input){
 		// STEP 2
 		xsplit(rest, "@", function(maybe_user_pass, rest){
 			
-			var parts = maybe_user_pass.split(":");
-			o.username = parts[0] || '';
-			o.password = parts[1] || '';
-			
 			if (rest=='')
 				rest= maybe_user_pass;
+			else {
+				var parts = maybe_user_pass.split(":");
+				o.username = parts[0] || '';
+				o.password = parts[1] || '';
+			}
 
 			// STEP 3
 			xsplit(rest,"#", function(rest, maybe_hash){
 				
-				o.hash = maybe_hash || "";
+				var without_invalid_qs = (maybe_hash || "").split("?");
+				o.hash = without_invalid_qs[0];
 				
-				console.log("Hash: ", o.hash);
-				
+				// STEP 4
 				xsplit(rest, "?", function(rest, maybe_query){
 					
 					o.qs = maybe_query || "";
 					
-					console.log("QS: ", o.qs);
+					var qso = o.qs.split("&");
 					
+					
+					// STEP 5
 					xsplit(rest, "/", function(rest, maybe_path){
 						
 						o.path = maybe_path || '';
 						
-						console.log("Path: ", o.path);
-						
+						// STEP 6 & 7
 						xsplit(rest, ":", function(rest, maybe_port){
 							
-							console.log("Rest: ", rest);
-							
 							o.port = +maybe_port || null;
-							
 							o.domain = rest;
 							
 						});
