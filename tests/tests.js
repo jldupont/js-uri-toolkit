@@ -20,6 +20,15 @@ var uri10 = "HTTP://user:pass@domain.com:6666/somepath?key1=value1&key2=value2#s
 
 // ----------------------------------------------------------------- TESTS - parsing
 
+it('Parse simple URI, no query artifacts', function(){
+	
+	var p = uri.parse(uri0);
+	var sz = Object.keys(p.query).length;
+	
+	should.equal(sz, 0, 'Got: ' + JSON.stringify(p.query));
+});
+
+
 it('HTTP should be the scheme', function(){
 	
 	var p = uri.parse(uri1);

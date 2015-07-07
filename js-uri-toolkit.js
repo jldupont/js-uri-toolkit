@@ -65,6 +65,9 @@ uri.parse = function(input){
 	// Process query string to an query object
 	function process_qs(input) {
 		
+		if ((input==null) || (input==undefined))
+			return {};
+		
 		var o={};
 		var parts = input.split("&");
 		
@@ -108,7 +111,7 @@ uri.parse = function(input){
 				// STEP 4
 				xsplit(rest, "?", function(rest, maybe_query){
 					
-					o.qs = maybe_query || "";
+					o.qs = maybe_query || null;
 					o.query = process_qs(o.qs);
 					
 					// STEP 5
