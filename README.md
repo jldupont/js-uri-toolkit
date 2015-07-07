@@ -41,5 +41,3 @@ Lightweight URI manipulation in Javascript
 	should.equal(result, 'http://user:pwd@domain.com:6666/?key1=9999&key2=xyz#fragment', 'Got: ' + result);
 ```
 
-# Status
-Work in progress
