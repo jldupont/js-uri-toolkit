@@ -100,6 +100,8 @@ uri.parse = function(input){
 			// STEP 3
 			xsplit(rest,"#", function(rest, maybe_hash){
 				
+				// Splice off the possible trailing query part
+				//  that should not be there anyways
 				var without_invalid_qs = (maybe_hash || "").split("?");
 				o.hash = without_invalid_qs[0];
 				
@@ -118,24 +120,69 @@ uri.parse = function(input){
 						xsplit(rest, ":", function(rest, maybe_port){
 							
 							o.port = +maybe_port || null;
-							o.domain = rest;
+							o.host = rest;
 							
-						});
+						});//step 6, 7
 						
-					});
+					});// step 5
 					
-				});
+				});// step 4
 				
-			});
+			});// step 3
 			
-		});
+		});// step 2
 		
-	});
+	});// step1
 	
 	
 	return o;
 };
 
+/*
+ *  Build a query string from a query object key/value elements
+ *  
+ *  @param query_object: Object | null | undefined
+ */
+uri.build_query_string = function(query_object) {
+
+	// typeof null == 'object' !
+	//
+	if ((query_object==null) || (typeof query_object!='object'))
+		return '';
+	
+	var qs = [];
+	
+	for (var key in query_object) {
+		var result = ""+key+"="+query_object[key];
+		qs.push(result);
+	}
+	
+	result = qs.join('&');
+	
+	return (result.length>0 ? "?"+result : '');
+};
+
+/*
+ *  Build a complete URI based on parts
+ *  
+ *  @param uri_parts: Object
+ *  	scheme, [username, password], host, [port, path, query, hash]
+ */
+uri.build = function(uri_parts) {
+	
+	var p = uri_parts;
+	
+	return [
+	        p.scheme || "http"
+	        ,'://'
+	        ,(p.username!=undefined ? p.username+":"+p.password+"@" : '')
+	        ,p.host
+	        ,(p.port!=undefined ? ":"+p.port : '')
+	        ,'/'
+	        ,uri.build_query_string(p.query)
+	        ,(p.hash!=undefined ? "#"+p.hash : '')
+	        ].join('');
+};
 
 // For the tests 
 //
