@@ -141,6 +141,10 @@ uri.parse = function(input){
 	return o;
 };
 
+uri._get_uri_encoder_function = function() {
+	
+};
+
 /*
  *  Build a query string from a query object key/value elements
  *  
@@ -148,6 +152,8 @@ uri.parse = function(input){
  */
 uri.build_query_string = function(query_object) {
 
+	var enc = encodeURIComponent;
+	
 	// typeof null == 'object' !
 	//
 	if ((query_object==null) || (typeof query_object!='object'))
@@ -156,7 +162,7 @@ uri.build_query_string = function(query_object) {
 	var qs = [];
 	
 	for (var key in query_object) {
-		var result = ""+key+"="+query_object[key];
+		var result = ""+enc(key)+"="+enc(query_object[key]);
 		qs.push(result);
 	}
 	
