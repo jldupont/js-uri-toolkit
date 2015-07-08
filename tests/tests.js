@@ -204,7 +204,7 @@ it('Build a complex URI - 1', function(){
 	
 	var result = uri.build(uri_parts);
 	
-	should.equal(result, 'http://user:pwd@domain.com:6666/?key=9999#fragment', 'Got: ' + result);
+	should.equal(result, 'http://user:pwd@domain.com:6666/somepath?key=9999#fragment', 'Got: ' + result);
 });
 
 it('Build a complex URI - 2', function(){
@@ -225,5 +225,5 @@ it('Build a complex URI - 2', function(){
 	
 	var result = uri.build(uri_parts);
 	
-	should.equal(result, 'http://user:pwd@domain.com:6666/?key1=9999&key2=xyz#fragment', 'Got: ' + result);
+	should.equal(result, 'http://user:pwd@domain.com:6666/somepath?key1=9999&key2=xyz#fragment', 'Got: ' + result);
 });

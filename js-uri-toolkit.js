@@ -188,6 +188,7 @@ uri.build = function(uri_parts) {
 	        ,p.host
 	        ,(p.port!=undefined ? ":"+p.port : '')
 	        ,'/'
+	        ,p.path || ''
 	        ,uri.build_query_string(p.query)
 	        ,(p.hash!=undefined ? "#"+p.hash : '')
 	        ].join('');
