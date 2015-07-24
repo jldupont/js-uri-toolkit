@@ -141,10 +141,6 @@ uri.parse = function(input){
 	return o;
 };
 
-uri._get_uri_encoder_function = function() {
-	
-};
-
 /*
  *  Build a query string from a query object key/value elements
  *  
