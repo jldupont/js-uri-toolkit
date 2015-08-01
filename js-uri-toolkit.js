@@ -6,7 +6,9 @@
  * According to https://en.wikipedia.org/wiki/URI_scheme 
  * 
  *   <scheme name> : <hierarchical part> [ ? <query> ] [ # <fragment> ]
- * 
+ *   
+ *   /over/there/index.dtb?type=animal&name=narwhal#nose?not_common
+ *   
  *   foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose?not_common
  *   foo://username:password@example.com:8042/over/there/index.dtb?type=animal&name=narwhal#nose
  *   foo://username:password@example.com:8042?type=animal&name=narwhal#nose
@@ -36,18 +38,44 @@
 
 uri = {};
 
-uri.parse = function(input){
+/*
+ *  Build a complete URI based on parts
+ *  
+ *  @param uri_parts: Object
+ *  	scheme, [username, password], host, [port, path, query, hash]
+ */
+uri.build = function(uri_parts) {
+	
+	var p = uri_parts;
+	
+	return [
+	        p.scheme || "http"
+	        ,'://'
+	        ,(p.username != undefined ? p.username+":"+p.password+"@" : '')
+	        ,p.host
+	        ,(p.port != undefined ? ":"+p.port : '')
+	        ,'/'
+	        ,p.path || ''
+	        ,uri.build_query_string(p.query)
+	        ,(p.hash != undefined && p.hash != '' ? "#"+p.hash : '')
+	        ].join('');
+};
+
+
+uri.parse = function(input, defaults){
+	
+	defaults = defaults || {};
 	
 	var o = {
-		scheme: '',
-		username: '',
-		password: '',
-		host: '',
-		port: '',
-		path: '',
-		qs: '',
-		query: {},
-		hash: ''
+		scheme:   defaults.scheme   || 'http',
+		username: defaults.username,
+		password: defaults.password,
+		host:     defaults.host     || 'localhost',
+		port:     defaults.port,
+		path:     defaults.path,
+		qs:       defaults.qs       || '',
+		hash:     defaults.hash,
+		query:    {}
 	};
 	
 	function xsplit(str, delim, callback) {
@@ -87,7 +115,19 @@ uri.parse = function(input){
 	// STEP 1
 	xsplit(input, "://", function(scheme, rest){
 		
-		o.scheme = scheme.toLowerCase();
+		// 'no host' case:
+		//  Assume the defaults and
+		//   trick the processing pipeline
+		if (rest=='') {
+
+			o.path = scheme;
+			rest = uri.build(o);
+			rest = rest.split("://")[1];
+			rest = rest.replace("//", "/");
+			
+		} else {
+			o.scheme = scheme.toLowerCase();	
+		}
 
 		// STEP 2
 		xsplit(rest, "@", function(maybe_user_pass, rest){
@@ -165,29 +205,6 @@ uri.build_query_string = function(query_object) {
 	result = qs.join('&');
 	
 	return (result.length>0 ? "?"+result : '');
-};
-
-/*
- *  Build a complete URI based on parts
- *  
- *  @param uri_parts: Object
- *  	scheme, [username, password], host, [port, path, query, hash]
- */
-uri.build = function(uri_parts) {
-	
-	var p = uri_parts;
-	
-	return [
-	        p.scheme || "http"
-	        ,'://'
-	        ,(p.username!=undefined ? p.username+":"+p.password+"@" : '')
-	        ,p.host
-	        ,(p.port!=undefined ? ":"+p.port : '')
-	        ,'/'
-	        ,p.path || ''
-	        ,uri.build_query_string(p.query)
-	        ,(p.hash!=undefined ? "#"+p.hash : '')
-	        ].join('');
 };
 
 // For the tests 

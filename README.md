@@ -17,7 +17,21 @@ Lightweight URI manipulation in Javascript
 	should.equal(p.hash,   'somehash');
 	should.equal(p.qs,     'key1=value1&key2=value2');
 	...
+	
+	// defaults can also be included
+	// in the case just a 'path' is to be parsed
+	
+	var p = uri.parse('/somepath', { port: 7777 });
+	
+	should.equal(p.scheme, 'http');
+	should.equal(p.host, 'localhost');
+	should.equal(p.port,   7777);
+	should.equal(p.path,   '/somepath');
+	...
+	
 ```
+
+
 
 ## Building a URI
 
@@ -40,4 +54,13 @@ Lightweight URI manipulation in Javascript
 	
 	should.equal(result, 'http://user:pwd@domain.com:6666/?key1=9999&key2=xyz#fragment', 'Got: ' + result);
 ```
+
+## Installation
+
+```sudo npm install```
+
+## Running Tests
+
+```npm test```
+
 

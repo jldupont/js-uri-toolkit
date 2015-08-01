@@ -62,16 +62,16 @@ it('No Username and Password', function(){
 	
 	var p = uri.parse(uri3);
 	
-	should.equal(p.username, '', 'Expected no username, got: '+p.username);
-	should.equal(p.password, '', 'Expected no password');
+	should.equal(p.username, undefined, 'Expected no username, got: '+p.username);
+	should.equal(p.password, undefined, 'Expected no password');
 });
 
 it('No Username and Password - simple URI', function(){
 	
 	var p = uri.parse(uri0);
 	
-	should.equal(p.username, '');
-	should.equal(p.password, '');
+	should.equal(p.username, undefined);
+	should.equal(p.password, undefined);
 });
 
 it('Port field present', function(){
@@ -226,4 +226,36 @@ it('Build a complex URI - 2', function(){
 	var result = uri.build(uri_parts);
 	
 	should.equal(result, 'http://user:pwd@domain.com:6666/somepath?key1=9999&key2=xyz#fragment', 'Got: ' + result);
+});
+
+it('Parse just a path - 1', function(){
+
+	var uri_parts_defaults = {
+			
+		port: 6666
+	};
+	
+	var just_path = "/somepath";
+	
+	var raw_result = uri.parse(just_path, uri_parts_defaults);
+	
+	var result = uri.build(raw_result);
+	
+	should.equal(result, 'http://localhost:6666/somepath', 'Got: ' + result);
+});
+
+it('Parse just a path - 2', function(){
+
+	var uri_parts_defaults = {
+		scheme: 'https'
+		,port: 6666
+	};
+	
+	var just_path = "/somepath?k=v#hash";
+	
+	var raw_result = uri.parse(just_path, uri_parts_defaults);
+	
+	var result = uri.build(raw_result);
+	
+	should.equal(result, 'https://localhost:6666/somepath?k=v#hash', 'Got: ' + result);
 });
