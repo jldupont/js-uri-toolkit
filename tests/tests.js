@@ -228,6 +228,49 @@ it('Build a complex URI - 2', function(){
 	should.equal(result, 'http://user:pwd@domain.com:6666/somepath?key1=9999&key2=xyz#fragment', 'Got: ' + result);
 });
 
+it('Build just host - 1', function(){
+	
+	var uri_parts = {
+		scheme: 'http'
+		,host: 'domain.com'
+		,username: 'user'
+		,password: 'pwd'
+		,port: 6666
+		
+		// ignored ...
+		,path: 'somepath'
+		,query: {
+			key: 9999 
+		}
+		,hash: 'fragment'
+	};
+	
+	var result = uri.build_host(uri_parts);
+	
+	should.equal(result, 'http://user:pwd@domain.com:6666', 'Got: ' + result);
+});
+
+it('Build just host - 2', function(){
+	
+	var uri_parts = {
+		scheme: 'http'
+		,host: 'domain.com'
+		,port: 6666
+		
+		// ignored ...
+		,path: 'somepath'
+		,query: {
+			key: 9999 
+		}
+		,hash: 'fragment'
+	};
+	
+	var result = uri.build_host(uri_parts);
+	
+	should.equal(result, 'http://domain.com:6666', 'Got: ' + result);
+});
+
+
 it('Parse just a path - 1', function(){
 
 	var uri_parts_defaults = {

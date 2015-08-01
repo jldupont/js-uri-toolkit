@@ -61,6 +61,25 @@ uri.build = function(uri_parts) {
 	        ].join('');
 };
 
+/*
+ *  Builds just the scheme://host[:port]/ part of the URI
+ *  
+ *	@param uri_parts: Object
+ *  	scheme, [username, password], host, [port]
+ *  
+ */
+uri.build_host = function(uri_parts) {
+
+	var p = uri_parts;
+	
+	return [
+	        p.scheme || "http"
+	        ,'://'
+	        ,(p.username != undefined ? p.username+":"+p.password+"@" : '')
+	        ,p.host
+	        ,(p.port != undefined ? ":"+p.port : '')
+	        ].join('');
+};
 
 uri.parse = function(input, defaults){
 	
